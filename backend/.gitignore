@@ -1,0 +1,29 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+ENV/
+
+# Configuration files
+*.env                # Environment variables (e.g., secret keys, database URIs)
+*.env.*
+
+# Logs
+logs/
+*.log
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Cache
+*.egg-info/
+*.egg
+*.sqlite3
+*.db
+*.pyo
