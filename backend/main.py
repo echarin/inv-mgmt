@@ -1,25 +1,22 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from typing import Annotated
 
-
-class UnicornException(Exception):
-    def __init__(self, name: str):
-        self.name = name
-
+from fastapi import Depends, FastAPI
 
 app = FastAPI()
 
 
-@app.exception_handler(UnicornException)
-async def unicorn_exception_handler(request: Request, exc: UnicornException):
-    return JSONResponse(
-        status_code=418,
-        content={"message": f"Oops! {exc.name} did something. There goes a rainbow..."},
-    )
+async def common_parameters(q: str | None = None, skip: int = 0, limit: int = 100):
+    return {"q": q, "skip": skip, "limit": limit}
 
 
-@app.get("/unicorns/{name}")
-async def read_unicorn(name: str):
-    if name == "yolo":
-        raise UnicornException(name=name)
-    return {"unicorn_name": name}
+CommonsDep = Annotated[dict, Depends(common_parameters)]
+
+
+@app.get("/items/")
+async def read_items(commons: CommonsDep):
+    return commons
+
+
+@app.get("/users/")
+async def read_users(commons: CommonsDep):
+    return commons
