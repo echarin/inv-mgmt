@@ -1,7 +1,19 @@
 import uvicorn
 from fastapi import FastAPI
 
-app = FastAPI()
+from backend.routers import items
+
+
+app = FastAPI(
+    title="Inventory Management App",
+    description="This is a simple inventory management app",
+    version="0.0.1",
+
+    dependencies=[]
+)
+
+
+app.include_router(items.router)
 
 
 @app.get("/")
