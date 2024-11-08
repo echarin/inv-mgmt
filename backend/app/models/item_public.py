@@ -1,4 +1,4 @@
-from backend.models.item_base import ItemBase
+from .item_base import ItemBase
 
 
 class ItemPublic(ItemBase):

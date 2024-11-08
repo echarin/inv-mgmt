@@ -10,7 +10,7 @@ env/
 ENV/
 
 # Configuration files
-*.env                # Environment variables (e.g., secret keys, database URIs)
+*.env
 *.env.*
 
 # Logs

@@ -1,5 +1,5 @@
 from sqlmodel import Field
-from backend.models.item_base import ItemBase
+from ..models.item_base import ItemBase
 
 
 class Item(ItemBase, table=True):

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from backend.models.item_create import ItemCreate
-from backend.models.item_public import ItemPublic
+from ..models.item_create import ItemCreate
+from ..models.item_public import ItemPublic
 
 
 router = APIRouter(

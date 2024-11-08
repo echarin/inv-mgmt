@@ -1,6 +1,6 @@
 from sqlmodel import Field, SQLModel
 
-from backend.models.category import Category
+from ..enums.category import Category
 
 
 class ItemBase(SQLModel):
