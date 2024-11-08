@@ -9,3 +9,5 @@ class Settings(BaseSettings):
     #     env_file = ".env"
 
 settings = Settings()
+
+# also see https://github.com/JakubPluta/gymhero/blob/main/gymhero/config.py for inspiration on using different settings

@@ -1,7 +1,17 @@
+from contextlib import asynccontextmanager
+
 import uvicorn
 from fastapi import FastAPI
 
-from .routers import items
+from .db.session import clear_db, create_db_and_tables
+from .routes import items
+
+
+@asynccontextmanager # see https://fastapi.tiangolo.com/advanced/events/#async-context-manager
+async def lifespan(app: FastAPI):
+    create_db_and_tables()
+    yield
+    clear_db()
 
 
 app = FastAPI(
@@ -9,15 +19,15 @@ app = FastAPI(
     description="This is a simple inventory management app",
     version="0.0.1",
 
-    dependencies=[]
+    dependencies=[],
+    lifespan=lifespan
 )
-
 
 app.include_router(items.router)
 
 
 @app.get("/")
-def root():
+async def root():
     return {"hello world"}
 
 

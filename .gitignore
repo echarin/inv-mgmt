@@ -3,3 +3,4 @@
 .mypy_cache/
 
 .coverage
+.vscode/settings.json

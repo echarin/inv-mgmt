@@ -1,3 +1,4 @@
+from decimal import Decimal
 from sqlmodel import Field, SQLModel
 
 from ..enums.category import Category
