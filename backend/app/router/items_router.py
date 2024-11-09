@@ -23,5 +23,5 @@ async def read_categories():
 
 @router.post("/create")
 async def create_item(session: SessionDep, item: ItemCreate):
-    item_created = items_crud.create_item(session, item)
+    item_created = items_crud.create_or_update_item(session, item)
     return { "id": item_created.id }
