@@ -4,7 +4,7 @@ from ..crud.items_crud import items_crud
 from ..dependencies import SessionDep
 from ..enums.category import Category
 from ..models.item_create import ItemCreate
-from ..models.item_public import ItemPublic
+from ..params.filter_params import FilterParams
 
 router = APIRouter(
     prefix="/items",
@@ -13,9 +13,9 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[ItemPublic])
-async def read_items(session: SessionDep):
-    return items_crud.read_items(session)
+@router.post("/")
+async def read_items(session: SessionDep, filter_params: FilterParams):
+    return items_crud.read_items(session, filter_params)
 
 @router.get("/categories")
 async def read_categories():
