@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from .db.session import clear_db, create_db_and_tables
-from .routes import items
+from .router import items_router
 
 
 @asynccontextmanager # see https://fastapi.tiangolo.com/advanced/events/#async-context-manager
@@ -23,7 +23,7 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-app.include_router(items.router)
+app.include_router(items_router.router)
 
 
 @app.get("/")

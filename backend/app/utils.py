@@ -1,9 +1,10 @@
 from datetime import datetime
+from decimal import Decimal
 
 import pytz
 
 
-def float_price_to_string(price: float) -> str:
+def decimal_price_to_string(price: Decimal) -> str:
     return f"{price:.2f}"
 
 def local_time() -> datetime:

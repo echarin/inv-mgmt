@@ -7,3 +7,7 @@ class Category(Enum):
     books = "books"
     clothing = "clothing"
     furniture = "furniture"
+
+    @classmethod
+    def values(cls):
+        return [e.value for e in cls]
