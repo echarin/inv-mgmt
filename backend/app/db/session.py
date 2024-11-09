@@ -2,6 +2,7 @@ from sqlmodel import Session, SQLModel, create_engine
 
 from ..config.config import settings
 
+
 engine = create_engine(settings.database_url, connect_args=settings.connect_args)
 
 
