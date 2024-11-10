@@ -4,15 +4,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Component Hierarchy Mockup
 
-- Form
-- FilterableItemTable
-  - SearchBar
-    - SearchFilterParams
-    - SearchPaginationParams
-    - SearchSortParams
-  - ItemTable
-    - ItemRow
-    - TotalPrice
+- InvMgmtSystem
+  - Form
+  - FilterableItemTable
+    - SearchBar
+    - ItemTable
+      - ItemRow
 
 ## Available Scripts
 

@@ -1,8 +1,59 @@
-export const PRODUCTS = [
-  { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
-  { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
-  { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
-  { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
-  { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
-  { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
+export const CREATED_RESPONSE = {
+  "id": 135
+}
+
+export const ITEMS_QUERY = {
+  "items": [
+    {
+      "id": 135,
+      "name": "Notebook",
+      "category": "stationery",
+      "price": 5.5
+    },
+    {
+      "id": 136,
+      "name": "Key Chain",
+      "category": "gift",
+      "price": 3
+    },
+    {
+      "id": 137,
+      "name": "Baggage Cover",
+      "category": "gift",
+      "price": 15
+    }
+  ],
+  "total_price": 23.5
+};
+
+export const ITEMS_WITH_PAGINATION = {
+  "items": [
+    {
+      "id": 135,
+      "name": "Notebook",
+      "category": "stationery",
+      "price": 5.5
+    },
+    {
+      "id": 136,
+      "name": "Key Chain",
+      "category": "gift",
+      "price": 3
+    },
+    {
+      "id": 137,
+      "name": "Baggage Cover",
+      "category": "gift",
+      "price": 15
+    }
+  ],
+  "total_price": 23.5,
+  "count": 3,
+  "page": 1,
+  "limit": 10
+};
+
+export const CATEGORIES = [
+  "stationery",
+  "gift"
 ];

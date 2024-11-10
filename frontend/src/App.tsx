@@ -1,7 +1,6 @@
 import './App.css';
-import FilterableProductTable from './components/FilterableProductTable';
-import { PRODUCTS } from './mockData';
+import InvMgmtSystem from './components/InvMgmtSystem';
 
 export default function App() {
-  return <FilterableProductTable products={PRODUCTS} />;
+  return <InvMgmtSystem />
 }
