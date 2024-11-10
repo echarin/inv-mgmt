@@ -6,7 +6,6 @@ from fastapi import FastAPI
 from .db.session import clear_db, create_db_and_tables
 from .router import items_router
 
-
 @asynccontextmanager # see https://fastapi.tiangolo.com/advanced/events/#async-context-manager
 async def lifespan(app: FastAPI):
     create_db_and_tables()

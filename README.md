@@ -14,3 +14,7 @@ Inventory management app using a FastAPI (Python) backend and React (TypeScript)
 - Go through React tutorial
 
 ## Current issues
+
+## React Notes
+
+### 

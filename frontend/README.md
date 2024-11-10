@@ -2,6 +2,18 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Component Hierarchy Mockup
+
+- Form
+- FilterableItemTable
+  - SearchBar
+    - SearchFilterParams
+    - SearchPaginationParams
+    - SearchSortParams
+  - ItemTable
+    - ItemRow
+    - TotalPrice
+
 ## Available Scripts
 
 In the project directory, you can run:
