@@ -14,3 +14,5 @@ export function jsonToCamelCase(obj: any): any {
 export function capitalise(s: string) {
   return String(s[0]).toUpperCase() + String(s).slice(1);
 }
+
+export const PRICE_REGEX = /^\d+(\.\d{1,2})?$/;
