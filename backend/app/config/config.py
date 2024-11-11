@@ -8,6 +8,11 @@ class Settings(BaseSettings):
     # class Config:
     #     env_file = ".env"
 
+origins = [
+    "http://127.0.0.1:3000",
+    "http://localhost:3000"
+]
+
 settings = Settings()
 
 # also see https://github.com/JakubPluta/gymhero/blob/main/gymhero/config.py for inspiration on using different settings
