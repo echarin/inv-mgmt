@@ -10,7 +10,7 @@ const ItemRow: React.FC<ItemRowProps> = ({ item }) => {
     <tr>
       <td>{item.name}</td>
       <td>{capitalise(item.category)}</td>
-      <td>{item.price}</td>
+      <td>{`$${item.price.toFixed(2)}`}</td>
     </tr>
   )
 }

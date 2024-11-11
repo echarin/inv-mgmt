@@ -20,6 +20,30 @@ const InventoryManagementSystem: React.FC = () => {
 
   const [errorMsg, setErrorMsg] = useState<string>('');
 
+  /**
+   * Fetch items based on search params, called in three scenarios:
+   * 1. When the component first loads
+   * 2. After an item create request is sent
+   * 3. After a search request is sent
+   */
+  const fetchItemsWithParams = useCallback(async (searchParams: SearchParams) => {
+    try {
+      setIsFetchingItems(true);
+      setCurrentSearchParams(searchParams);
+      const response = await apiClient.post(routes.read_items, searchParams);
+      const data = jsonToCamelCase(response.data) as ItemsQuery;
+
+      // consider sorting data, or backend sorts by category then name by default
+
+      setItemsQuery(data);
+    } catch (error) {
+      console.error(`Error fetching items: ${error}.`);
+      setErrorMsg("Error fetching items. Please try again later.");
+    } finally {
+      setIsFetchingItems(false);
+    }
+  }, []);
+
   // Populate category dropdowns
   useEffect(() => {
     const fetchCategories = async () => {
@@ -36,21 +60,7 @@ const InventoryManagementSystem: React.FC = () => {
     };
 
     fetchCategories();
-  }, []);
-
-  // Fetch items based on search params
-  const fetchItemsWithParams = useCallback(async (searchParams: SearchParams) => {
-    try {
-      setIsFetchingItems(true);
-      setCurrentSearchParams(searchParams);
-      const response = await apiClient.post(routes.read_items, searchParams);
-      setItemsQuery(jsonToCamelCase(response.data) as ItemsQuery);
-    } catch (error) {
-      console.error(`Error fetching items: ${error}.`);
-      setErrorMsg("Error fetching items. Please try again later.");
-    } finally {
-      setIsFetchingItems(false);
-    }
+    fetchItemsWithParams(currentSearchParams);
   }, []);
 
   return (

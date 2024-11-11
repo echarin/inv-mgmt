@@ -25,17 +25,20 @@ const ItemTable: React.FC<ItemTableProps> = ({
   }
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>{rows.length === 0 ? 'No items to display' : rows}</tbody>
-      <tfoot>{totalPrice ? `Total price: ${totalPrice}` : ''}</tfoot>
-    </table>
+    <>
+      {isFetchingItems && <div className="loading">Fetching items...</div>}
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{rows.length === 0 ? 'No items to display' : rows}</tbody>
+        <tfoot>{totalPrice ? `Total price: $${totalPrice}` : ''}</tfoot>
+      </table>
+    </>
   );
 }
 
