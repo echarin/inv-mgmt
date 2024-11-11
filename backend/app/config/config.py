@@ -8,7 +8,9 @@ class Settings(BaseSettings):
     # class Config:
     #     env_file = ".env"
 
+# CORSMiddleware
 origins = [
+    # local dev
     "http://127.0.0.1:3000",
     "http://localhost:3000"
 ]

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Self
 
-from pydantic import model_validator
+from pydantic import field_validator, model_validator
 
 from ..enums.category import Category
 from .params import Params
@@ -16,6 +16,14 @@ class FilterParams(Params):
         json_encoders = {
             datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M:%S")
         }
+
+    # allows frontend to send empty strings for fields
+    @field_validator('dt_from', 'dt_to', 'category', mode='before')
+    @classmethod
+    def empty_string_to_none(cls, value):
+        if value == '':
+            return None
+        return value
     
     @model_validator(mode="after")
     def validate_date_range(self) -> Self:
