@@ -2,20 +2,27 @@ import { ItemsQuery } from "../types";
 import ItemRow from "./ItemRow";
 
 interface ItemTableProps {
-  itemsQuery: ItemsQuery;
+  itemsQuery: ItemsQuery | null;
+  isFetchingItems: boolean;
 }
 
-const ItemTable: React.FC<ItemTableProps> = ({ itemsQuery }) => {
+const ItemTable: React.FC<ItemTableProps> = ({
+  itemsQuery,
+  isFetchingItems
+}) => {
+  const totalPrice = itemsQuery?.totalPrice;
   const rows: React.ReactNode[] = [];
-  const items = itemsQuery.items;
-  items.forEach((item) => {
-    rows.push(
-      <ItemRow
-        key={item.id}
-        item={item}
-      />
-    );
-  });
+  const items = itemsQuery?.items;
+  if (items) {
+    items.forEach((item) => {
+      rows.push(
+        <ItemRow
+          key={item.id}
+          item={item}
+        />
+      );
+    });
+  }
 
   return (
     <table>
@@ -26,8 +33,8 @@ const ItemTable: React.FC<ItemTableProps> = ({ itemsQuery }) => {
           <th>Price</th>
         </tr>
       </thead>
-      <tbody>{rows}</tbody>
-      <tfoot>Total price: ${itemsQuery.totalPrice}</tfoot>
+      <tbody>{rows.length === 0 ? 'No items to display' : rows}</tbody>
+      <tfoot>{totalPrice ? `Total price: ${totalPrice}` : ''}</tfoot>
     </table>
   );
 }

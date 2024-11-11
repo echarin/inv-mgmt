@@ -1,17 +1,35 @@
-import { Item, ItemsQuery } from "../types";
+import { ItemsQuery, SearchParams } from "../types";
 import ItemTable from "./ItemTable";
 import SearchBar from "./SearchBar";
 
 interface FilterableItemTableProps {
-  itemsQuery: ItemsQuery
+  categories: string[];
+  itemsQuery: ItemsQuery | null;
+  isFetchingItems: boolean;
+  isFetchingCategories: boolean;
+  onSearch: (searchParams: SearchParams) => void;
 }
 
-const FilterableItemTable: React.FC<FilterableItemTableProps> = ({ itemsQuery }) => {
+const FilterableItemTable: React.FC<FilterableItemTableProps> = ({
+  categories,
+  itemsQuery,
+  isFetchingItems,
+  isFetchingCategories,
+  onSearch,
+}) => {
+
   return (
     <div>
       <h1>FilterableItemTable</h1>
-      <SearchBar />
-      <ItemTable itemsQuery={itemsQuery} />
+      <SearchBar
+        categories={categories}
+        isFetchingCategories={isFetchingCategories}
+        onSearch={onSearch}
+      />
+      <ItemTable
+        itemsQuery={itemsQuery}
+        isFetchingItems={isFetchingItems}
+      />
     </div>
   );
 }

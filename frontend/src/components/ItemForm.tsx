@@ -1,64 +1,44 @@
-import { useEffect, useState } from "react";
-import { ItemCreate } from "../types";
+import { useState } from "react";
+import { ItemCreate, SearchParams } from "../types";
 import { capitalise, PRICE_REGEX } from "../utils";
 
 import { routes } from "../config";
 import apiClient from "../services/axios";
 
-const ItemForm: React.FC = () => {
+interface ItemFormProps {
+  categories: string[];
+  isFetchingCategories: boolean;
+  onItemCreated: (searchParams: SearchParams) => void;
+  searchParams: SearchParams;
+}
+
+const ItemForm: React.FC<ItemFormProps> = ({
+  categories,
+  isFetchingCategories,
+  onItemCreated,
+  searchParams
+}) => {
   const [name, setName] = useState<string>('');
   // store form input values as strings, even for numbers
   const [price, setPrice] = useState<string>('');
   const [category, setCategory] = useState<string>('');
 
-  const [categories, setCategories] = useState<string[]>([]);
-
-  const [isLoadingCategories, setIsLoadingCategories] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [successMsg, setSuccessMsg] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string>('');
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        setIsLoadingCategories(true);
-        const response = await apiClient.get(routes.read_categories);
-        setCategories(response.data);
-      } catch (error) {
-        console.error(`Error fetching categories: ${error}.`);
-        setIsLoadingCategories(false);
-        setErrorMsg('Error fetching categories. Please try again later.');
-      } finally {
-        setIsLoadingCategories(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  const isDataValid = ({
-    name,
-    price,
-    category
-  }: {
-    name: string,
-    price: string,
-    category: string
-  }) => {
+  const isDataValid = (): string | null => {
     if (!name.trim() || !category.trim() || !price.trim()) {
-      setErrorMsg('Please fill in all fields.');
-      return false;
+      return 'Please fill in all fields.';
     }
 
     const priceRegex = PRICE_REGEX;
     if (!priceRegex.test(price) || parseFloat(price) < 0) {
-      setErrorMsg('Price must be a non-negative number with up to two decimal places.');
-      return false;
+      return 'Price must be a non-negative number with up to two decimal places.';
     }
 
-    setErrorMsg('');
-    return true;
+    return null;
   };
 
   const resetForm = () => {
@@ -71,7 +51,11 @@ const ItemForm: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!isDataValid({ name, price, category })) return;
+    const validationError = isDataValid();
+    if (validationError) {
+      setErrorMsg(validationError);
+      return;
+    }
 
     const itemData: ItemCreate = {
       name: name.trim(),
@@ -88,6 +72,8 @@ const ItemForm: React.FC = () => {
       resetForm();
 
       setSuccessMsg(`Item created successfully with id ${response.data.id}.`);
+
+      onItemCreated(searchParams);
     } catch (error) {
       console.error(`Error creating item: ${error}.`);
       setErrorMsg('Error creating item. Please try again later.');
@@ -98,7 +84,7 @@ const ItemForm: React.FC = () => {
 
   return (
     <>
-      {isLoadingCategories ? (
+      {isFetchingCategories ? (
         <div>Loading categories...</div>
       ) : (
         <form onSubmit={handleSubmit}>

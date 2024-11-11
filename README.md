@@ -9,6 +9,8 @@ Inventory management app using a FastAPI (Python) backend and React (TypeScript)
 - Implement further pagination
 - Deploy
 
+- Unit tests
+
 ### Frontend
 
 - Go through React tutorial

@@ -1,6 +1,6 @@
 import './App.css';
-import InvMgmtSystem from './components/InvMgmtSystem';
+import InventoryManagementSystem from './components/InventoryManagementSystem';
 
 export default function App() {
-  return <InvMgmtSystem />
+  return <InventoryManagementSystem />
 }
