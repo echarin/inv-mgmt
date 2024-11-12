@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Self
 
-from pydantic import field_validator, model_validator
+from pydantic import field_serializer, field_validator, model_validator
 
 from ..enums.category import Category
 from .params import Params
@@ -12,10 +12,11 @@ class FilterParams(Params):
     dt_to: datetime | None = None
     category: Category | None = None
 
-    class Config:
-        json_encoders = {
-            datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M:%S")
-        }
+    @field_serializer("dt_from", "dt_to")
+    def serialize_datetime(self, dt: datetime | None):
+        if dt is None:
+            return None
+        return dt.strftime("%Y-%m-%d %H:%M:%S")
 
     # allows frontend to send empty strings for fields
     @field_validator('dt_from', 'dt_to', 'category', mode='before')
