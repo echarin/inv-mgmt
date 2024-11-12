@@ -5,6 +5,7 @@ import { ItemsQuery, SearchParams } from "../types";
 import { jsonToCamelCase } from "../utils";
 import FilterableItemTable from "./FilterableItemTable";
 import ItemForm from "./ItemForm";
+import { Typography } from "@mui/material";
 
 const InventoryManagementSystem: React.FC = () => {
   const [itemsQuery, setItemsQuery] = useState<ItemsQuery | null>(null);
@@ -65,8 +66,14 @@ const InventoryManagementSystem: React.FC = () => {
 
   return (
     <div>
-      <h1>Inventory Management System</h1>
-      {errorMsg && <div className="error">{errorMsg}</div>}
+      <Typography variant="h4" align="center" padding={2}>
+        Inventory Management System
+      </Typography>
+      {errorMsg && (
+        <Typography variant="body1" align="center" padding={2}>
+          {errorMsg}
+        </Typography>
+      )}
       <ItemForm
         categories={categories}
         isFetchingCategories={isFetchingCategories}

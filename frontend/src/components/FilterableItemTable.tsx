@@ -20,7 +20,6 @@ const FilterableItemTable: React.FC<FilterableItemTableProps> = ({
 
   return (
     <div>
-      <h1>FilterableItemTable</h1>
       <SearchBar
         categories={categories}
         isFetchingCategories={isFetchingCategories}

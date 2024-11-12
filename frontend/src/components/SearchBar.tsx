@@ -1,4 +1,4 @@
-import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, Button, FormControl, FormHelperText, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import { DateOrTimeView, DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
@@ -78,71 +78,85 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <DateTimePicker
-            label="Start date"
-            views={datePickerViews}
-            value={dtFrom}
-            onChange={(d) => setDtFrom(d)}
-            slotProps={{
-              textField: {
-                error: false // Don't display error in start date
-              },
-              field: {
-                clearable: true
-              }
-            }}
-          />
-          <DateTimePicker
-            label="End date"
-            views={datePickerViews}
-            value={dtTo}
-            onChange={(d) => setDtTo(d)}
-            slotProps={{
-              textField: {
-                error: Boolean(dateError),
-                helperText: dateError
-              },
-              field: {
-                clearable: true
-              }
-            }}
-          />
-          <FormControl
-            error={Boolean(categoryError)}
-            style={{ minWidth: 200 }}
-          >
-            <InputLabel id="category-label">Category</InputLabel>
-            <Select
-              labelId="category-label"
-              id="category"
-              value={category}
-              label="Category"
-              onChange={(e) => setCategory(e.target.value)}
+    <Box
+      component="form"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      padding={3}
+      gap={2} // MUI's spacing system, equivalent to 16px
+      width="100%"
+      maxWidth={1000}
+    >
+      <Typography variant="h6" gutterBottom>
+        Search inventory
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <DateTimePicker
+              label="Start date"
+              views={datePickerViews}
+              value={dtFrom}
+              onChange={(d) => setDtFrom(d)}
+              slotProps={{
+                textField: {
+                  error: false // Don't display error in start date
+                },
+                field: {
+                  clearable: true
+                }
+              }}
+            />
+            <DateTimePicker
+              label="End date"
+              views={datePickerViews}
+              value={dtTo}
+              onChange={(d) => setDtTo(d)}
+              slotProps={{
+                textField: {
+                  error: Boolean(dateError),
+                  helperText: dateError
+                },
+                field: {
+                  clearable: true
+                }
+              }}
+            />
+            <FormControl
+              error={Boolean(categoryError)}
+              style={{ minWidth: 200 }}
             >
-              <MenuItem value="">
-                <em>All Categories</em>
-              </MenuItem>
-              {categories.map((c) => (
-                <MenuItem key={c} value={c}>
-                  {capitalise(c)}
+              <InputLabel id="category-label">Category</InputLabel>
+              <Select
+                labelId="category-label"
+                id="category"
+                value={category}
+                label="Category"
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <MenuItem value="">
+                  <em>All Categories</em>
                 </MenuItem>
-              ))}
-            </Select>
-            {categoryError && <FormHelperText>{categoryError}</FormHelperText>}
-          </FormControl>
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={isFetchingCategories || isFetchingItems}
-          >
-            {isFetchingItems ? 'Searching...' : 'Search'}
-          </Button>
-        </div>
-      </LocalizationProvider>
-    </form>
+                {categories.map((c) => (
+                  <MenuItem key={c} value={c}>
+                    {capitalise(c)}
+                  </MenuItem>
+                ))}
+              </Select>
+              {categoryError && <FormHelperText>{categoryError}</FormHelperText>}
+            </FormControl>
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={isFetchingCategories || isFetchingItems}
+            >
+              {isFetchingItems ? 'Searching...' : 'Search'}
+            </Button>
+          </div>
+        </LocalizationProvider>
+      </form>
+    </Box>
   );
 };
 

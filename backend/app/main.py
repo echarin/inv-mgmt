@@ -15,7 +15,7 @@ async def lifespan(app: FastAPI):
     yield
     clear_db()
 
-
+# test
 app = FastAPI(
     title="Inventory Management App",
     description="This is a simple inventory management app",

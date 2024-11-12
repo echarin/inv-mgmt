@@ -1,8 +1,13 @@
-import './App.css';
+import { CssBaseline } from '@mui/material';
+import AppLayout from './components/AppLayout';
 import InventoryManagementSystem from './components/InventoryManagementSystem';
 
 export default function App() {
   return (
-    <InventoryManagementSystem />
+    <AppLayout>
+      <CssBaseline>
+        <InventoryManagementSystem />
+      </CssBaseline>
+    </AppLayout>
   );
 }

@@ -1,18 +1,20 @@
+import { TableCell, TableRow } from "@mui/material";
+import React from "react";
 import { Item } from "../types";
 import { capitalise } from "../utils";
 
 interface ItemRowProps {
-  item: Item
+  item: Item;
 }
 
 const ItemRow: React.FC<ItemRowProps> = ({ item }) => {
   return (
-    <tr>
-      <td>{item.name}</td>
-      <td>{capitalise(item.category)}</td>
-      <td>{`$${item.price.toFixed(2)}`}</td>
-    </tr>
-  )
-}
+    <TableRow>
+      <TableCell align="left">{item.name}</TableCell>
+      <TableCell align="center">{capitalise(item.category)}</TableCell>
+      <TableCell align="right">{`$${item.price.toFixed(2)}`}</TableCell>
+    </TableRow>
+  );
+};
 
 export default ItemRow;
