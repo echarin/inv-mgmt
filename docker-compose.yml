@@ -1,0 +1,36 @@
+name: inv-mgmt
+
+services:
+  db:
+    image: mysql:lts
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - .mysql_data:/var/lib/mysql
+    env_file: 
+      - .env
+  
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+
+volumes:
+  mysql_data:
