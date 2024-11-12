@@ -1,16 +1,33 @@
-from pydantic_settings import BaseSettings
+from pydantic import MySQLDsn
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# come back to https://fastapi.tiangolo.com/advanced/settings/#reading-a-env-file 
+
+# come back to https://fastapi.tiangolo.com/advanced/settings/#reading-a-env-file
+# reference: https://github.com/fastapi/full-stack-fastapi-template/blob/master/backend/app/core/config.py
 class Settings(BaseSettings):
-    database_url: str = "sqlite:///./database.db"
-    connect_args: dict = {"check_same_thread": False}
+    model_config = SettingsConfigDict(
+        env_file="../.env",
+        env_ignore_empty=True,
+        extra="ignore",
+        env_file_encoding="utf-8",
+    )
 
-# CORSMiddleware
-origins = [
-    # running locally
-    "http://127.0.0.1:3000",
-    "http://localhost:3000"
-]
+    MYSQL_DATABASE: str
+    MYSQL_USER: str
+    MYSQL_PASSWORD: str
+    MYSQL_HOST: str
+    MYSQL_PORT: int
+
+    @property
+    def SQLALCHEMY_DATABASE_URI(self) -> MySQLDsn:
+        return MySQLDsn.build(
+            scheme="mysql+pymysql",
+            username=self.MYSQL_USER,
+            password=self.MYSQL_PASSWORD,
+            host=self.MYSQL_HOST,
+            port=self.MYSQL_PORT,
+            path=f"{self.MYSQL_DATABASE}",
+        )
 
 settings = Settings()
 

@@ -1,19 +1,22 @@
 from contextlib import asynccontextmanager
+from tenacity import retry, wait_fixed, stop_after_delay
 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .config.config import origins
-from .db.session import clear_db, create_db_and_tables
+from .db.session import create_db_and_tables
 from .router import items_router
 
 
+@retry(wait=wait_fixed(2), stop=stop_after_delay(30))
+def initialize_database():
+    create_db_and_tables()
+
 @asynccontextmanager  # see https://fastapi.tiangolo.com/advanced/events/#async-context-manager
 async def lifespan(app: FastAPI):
-    create_db_and_tables()
+    initialize_database()
     yield
-    clear_db()
 
 # test
 app = FastAPI(
@@ -27,7 +30,7 @@ app = FastAPI(
 app.include_router(items_router.router)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,4 +43,4 @@ async def root():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8080)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
