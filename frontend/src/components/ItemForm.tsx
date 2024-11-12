@@ -118,88 +118,98 @@ const ItemForm: React.FC<ItemFormProps> = ({
     ) : (
       <Box
         component="form"
+        onSubmit={handleSubmit}
         display="flex"
         flexDirection="column"
         alignItems="center"
         padding={3}
         gap={2}
         width="100%"
-        maxWidth={1000}
+        maxWidth={800}
       >
         <Typography variant="h6" gutterBottom>
           Create/update item
         </Typography>
-        <form onSubmit={handleSubmit}>
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <TextField
-              id="name"
-              label="Name"
-              type="text"
-              value={name}
-              placeholder="Pencil"
-              onChange={(e) => setName(e.target.value)}
-              error={Boolean(nameError)}
-              helperText={nameError}
-              required
-            />
-            <TextField
-              id="price"
-              label="Price"
-              type="number"
-              value={price}
-              placeholder="5.50"
-              onChange={(e) => setPrice(e.target.value)}
-              error={Boolean(priceError)}
-              helperText={priceError}
-              required
-              slotProps={{
-                input: {
-                  // Place a "$" in front without being part of the value
-                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                  inputProps: {
-                    step: 0.01,
-                    min: 0,
-                  },
-                }
-              }}
-            />
-            <FormControl
-              error={Boolean(categoryError)}
-              required
-              style={{ minWidth: 200 }}
+        <Box
+          display="flex"
+          width="100%"
+          justifyContent="space-between"
+          alignItems="center"
+          gap={2}
+          flex="1"
+        >
+          <TextField
+            id="name"
+            label="Name"
+            type="text"
+            value={name}
+            placeholder="Pencil"
+            onChange={(e) => setName(e.target.value)}
+            error={Boolean(nameError)}
+            helperText={nameError}
+            required
+          />
+          <TextField
+            id="price"
+            label="Price"
+            type="number"
+            value={price}
+            placeholder="5.50"
+            onChange={(e) => setPrice(e.target.value)}
+            error={Boolean(priceError)}
+            helperText={priceError}
+            required
+            slotProps={{
+              input: {
+                // Place a "$" in front without being part of the value
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                inputProps: {
+                  step: 0.01,
+                  min: 0,
+                },
+              }
+            }}
+          />
+          <FormControl
+            error={Boolean(categoryError)}
+            required
+            style={{ minWidth: 200 }}
+          >
+            <InputLabel id="category-label">Category</InputLabel>
+            <Select
+              labelId="category-label"
+              id="category"
+              value={category}
+              label="Category"
+              onChange={(e) => setCategory(e.target.value)}
             >
-              <InputLabel id="category-label">Category</InputLabel>
-              <Select
-                labelId="category-label"
-                id="category"
-                value={category}
-                label="Category"
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <MenuItem value="" disabled>
-                  Select category
+              <MenuItem value="" disabled>
+                Select category
+              </MenuItem>
+              {categories.map((c) => (
+                <MenuItem key={c} value={c}>
+                  {capitalise(c)}
                 </MenuItem>
-                {categories.map((c) => (
-                  <MenuItem key={c} value={c}>
-                    {capitalise(c)}
-                  </MenuItem>
-                ))}
-              </Select>
-              {categoryError && <FormHelperText>{categoryError}</FormHelperText>}
-            </FormControl>
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : "Save Item"}
-            </Button>
-            {successMsg && (
-              <Typography variant="body1" color="success">
-                {successMsg}
-              </Typography>
-            )}
-          </div>
-        </form>
+              ))}
+            </Select>
+            {categoryError && <FormHelperText>{categoryError}</FormHelperText>}
+          </FormControl>
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={isSubmitting}>
+            {isSubmitting ? 'Sending...' : "Send"}
+          </Button>
+        </Box>
+        {successMsg && (
+          <Typography
+            variant="body1"
+            color="success"
+            padding={1}
+          >
+            {successMsg}
+          </Typography>
+        )}
       </Box>
     )}
   </>);

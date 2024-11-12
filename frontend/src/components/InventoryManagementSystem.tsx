@@ -18,7 +18,6 @@ const InventoryManagementSystem: React.FC = () => {
 
   const [isFetchingItems, setIsFetchingItems] = useState<boolean>(false);
   const [isFetchingCategories, setIsFetchingCategories] = useState<boolean>(false);
-
   const [errorMsg, setErrorMsg] = useState<string>('');
 
   /**
@@ -33,9 +32,6 @@ const InventoryManagementSystem: React.FC = () => {
       setCurrentSearchParams(searchParams);
       const response = await apiClient.post(routes.read_items, searchParams);
       const data = jsonToCamelCase(response.data) as ItemsQuery;
-
-      // consider sorting data, or backend sorts by category then name by default
-
       setItemsQuery(data);
     } catch (error) {
       console.error(`Error fetching items: ${error}.`);
@@ -62,7 +58,7 @@ const InventoryManagementSystem: React.FC = () => {
 
     fetchCategories();
     fetchItemsWithParams(currentSearchParams);
-  }, []);
+  }, [fetchItemsWithParams, currentSearchParams]);
 
   return (
     <div>

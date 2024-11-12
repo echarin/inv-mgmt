@@ -80,82 +80,88 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <Box
       component="form"
+      onSubmit={handleSubmit}
       display="flex"
       flexDirection="column"
       alignItems="center"
       padding={3}
-      gap={2} // MUI's spacing system, equivalent to 16px
+      gap={2} 
       width="100%"
-      maxWidth={1000}
+      maxWidth={800}
     >
       <Typography variant="h6" gutterBottom>
         Search inventory
       </Typography>
-      <form onSubmit={handleSubmit}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <DateTimePicker
-              label="Start date"
-              views={datePickerViews}
-              value={dtFrom}
-              onChange={(d) => setDtFrom(d)}
-              slotProps={{
-                textField: {
-                  error: false // Don't display error in start date
-                },
-                field: {
-                  clearable: true
-                }
-              }}
-            />
-            <DateTimePicker
-              label="End date"
-              views={datePickerViews}
-              value={dtTo}
-              onChange={(d) => setDtTo(d)}
-              slotProps={{
-                textField: {
-                  error: Boolean(dateError),
-                  helperText: dateError
-                },
-                field: {
-                  clearable: true
-                }
-              }}
-            />
-            <FormControl
-              error={Boolean(categoryError)}
-              style={{ minWidth: 200 }}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Box style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <DateTimePicker
+            label="Start date"
+            views={datePickerViews}
+            value={dtFrom}
+            onChange={(d) => setDtFrom(d)}
+            slotProps={{
+              textField: {
+                error: false // Don't display error in start date
+              },
+              field: {
+                clearable: true
+              }
+            }}
+          />
+          <DateTimePicker
+            label="End date"
+            views={datePickerViews}
+            value={dtTo}
+            onChange={(d) => setDtTo(d)}
+            slotProps={{
+              textField: {
+                error: Boolean(dateError),
+                helperText: dateError
+              },
+              field: {
+                clearable: true
+              }
+            }}
+          />
+          <FormControl
+            error={Boolean(categoryError)}
+            style={{ minWidth: 150 }}
+          >
+            <InputLabel id="category-label">Category</InputLabel>
+            <Select
+              labelId="category-label"
+              id="category"
+              value={category}
+              label="Category"
+              onChange={(e) => setCategory(e.target.value)}
             >
-              <InputLabel id="category-label">Category</InputLabel>
-              <Select
-                labelId="category-label"
-                id="category"
-                value={category}
-                label="Category"
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <MenuItem value="">
-                  <em>All Categories</em>
+              <MenuItem value="">
+                <em>All Categories</em>
+              </MenuItem>
+              {categories.map((c) => (
+                <MenuItem key={c} value={c}>
+                  {capitalise(c)}
                 </MenuItem>
-                {categories.map((c) => (
-                  <MenuItem key={c} value={c}>
-                    {capitalise(c)}
-                  </MenuItem>
-                ))}
-              </Select>
-              {categoryError && <FormHelperText>{categoryError}</FormHelperText>}
-            </FormControl>
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={isFetchingCategories || isFetchingItems}
-            >
-              {isFetchingItems ? 'Searching...' : 'Search'}
-            </Button>
-          </div>
-        </LocalizationProvider>
-      </form>
+              ))}
+            </Select>
+            {categoryError && <FormHelperText>{categoryError}</FormHelperText>}
+          </FormControl>
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={isFetchingCategories || isFetchingItems}
+          >
+            {isFetchingItems ? 'Searching...' : 'Search'}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleClearFields}
+            color="secondary"
+          >
+            Clear
+          </Button>
+        </Box>
+      </LocalizationProvider>
     </Box>
   );
 };

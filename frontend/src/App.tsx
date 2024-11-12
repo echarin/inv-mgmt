@@ -5,9 +5,8 @@ import InventoryManagementSystem from './components/InventoryManagementSystem';
 export default function App() {
   return (
     <AppLayout>
-      <CssBaseline>
-        <InventoryManagementSystem />
-      </CssBaseline>
+      <CssBaseline />
+      <InventoryManagementSystem />
     </AppLayout>
   );
 }
