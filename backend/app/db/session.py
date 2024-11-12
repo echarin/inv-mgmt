@@ -16,7 +16,3 @@ def clear_db():
 def get_session():
     with Session(engine) as session:
         yield session
-
-
-def init_db(session: Session):
-    user = session.exec()
