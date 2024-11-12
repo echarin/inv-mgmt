@@ -36,7 +36,7 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"hello world"}
+    return {"msg": "Hello World"}
 
 
 if __name__ == "__main__":
