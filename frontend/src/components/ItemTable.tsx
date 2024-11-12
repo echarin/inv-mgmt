@@ -36,7 +36,7 @@ const ItemTable: React.FC<ItemTableProps> = ({
           </tr>
         </thead>
         <tbody>{rows.length === 0 ? 'No items to display' : rows}</tbody>
-        <tfoot>{totalPrice ? `Total price: $${totalPrice}` : ''}</tfoot>
+        <tfoot>{totalPrice ? `Total price: $${totalPrice.toFixed(2)}` : ''}</tfoot>
       </table>
     </>
   );

@@ -24,6 +24,7 @@ const FilterableItemTable: React.FC<FilterableItemTableProps> = ({
       <SearchBar
         categories={categories}
         isFetchingCategories={isFetchingCategories}
+        isFetchingItems={isFetchingItems}
         onSearch={onSearch}
       />
       <ItemTable

@@ -1,9 +1,9 @@
+import { Button, FormControl, FormHelperText, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { useState } from "react";
-import { ItemCreate, SearchParams } from "../types";
-import { capitalise, PRICE_REGEX } from "../utils";
-
 import { routes } from "../config";
 import apiClient from "../services/axios";
+import { ItemCreate, SearchParams } from "../types";
+import { capitalise, PRICE_REGEX } from "../utils";
 
 interface ItemFormProps {
   categories: string[];
@@ -25,35 +25,57 @@ const ItemForm: React.FC<ItemFormProps> = ({
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const [nameError, setNameError] = useState<string>('');
+  const [priceError, setPriceError] = useState<string>('');
+  const [categoryError, setCategoryError] = useState<string>('');
   const [successMsg, setSuccessMsg] = useState<string>('');
-  const [errorMsg, setErrorMsg] = useState<string>('');
 
-  const isDataValid = (): string | null => {
-    if (!name.trim() || !category.trim() || !price.trim()) {
-      return 'Please fill in all fields.';
+  const isDataValid = () => {
+    let valid = true;
+    setNameError('');
+    setPriceError('');
+    setCategoryError('');
+
+    if (!name.trim()) {
+      setNameError('Name is required.');
+      valid = false;
     }
 
-    const priceRegex = PRICE_REGEX;
-    if (!priceRegex.test(price) || parseFloat(price) < 0) {
-      return 'Price must be a non-negative number with up to two decimal places.';
+    if (!price.trim()) {
+      setPriceError('Price is required.');
+      valid = false;
+    } else {
+      const priceRegex = PRICE_REGEX;
+      if (!priceRegex.test(price) || parseFloat(price) < 0) {
+        setPriceError('Price must be a non-negative number with up to two decimal places.');
+        valid = false;
+      }
     }
 
-    return null;
+    if (!category.trim()) {
+      setCategoryError('Category is required.');
+      valid = false;
+    } else if (!categories.includes(category.trim())) {
+      setCategoryError('Invalid category selected.');
+      valid = false;
+    }
+
+    return valid;
   };
 
   const resetForm = () => {
     setName('');
     setPrice('');
     setCategory('');
-    setErrorMsg('');
+    setNameError('');
+    setPriceError('');
+    setCategoryError('');
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const validationError = isDataValid();
-    if (validationError) {
-      setErrorMsg(validationError);
+    if (!isDataValid()) {
       return;
     }
 
@@ -76,69 +98,89 @@ const ItemForm: React.FC<ItemFormProps> = ({
       onItemCreated(searchParams);
     } catch (error) {
       console.error(`Error creating item: ${error}.`);
-      setErrorMsg('Error creating item. Please try again later.');
+      setSuccessMsg('');
+      setNameError('Error creating item. Please try again later.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  return (
-    <>
-      {isFetchingCategories ? (
-        <div>Loading categories...</div>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Name:</label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              placeholder="Pencil"
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Price:</label>
-            <input
-              id="price"
-              type="number"
-              value={price}
-              step="0.01"
-              min="0"
-              placeholder="5.50"
-              onChange={(e) => setPrice(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Category:</label>
-            <select
+  return (<>
+    {isFetchingCategories ? (
+      <div>Loading categories...</div>
+    ) : (
+      <form onSubmit={handleSubmit}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <TextField
+            id="name"
+            label="Name"
+            type="text"
+            value={name}
+            placeholder="Pencil"
+            onChange={(e) => setName(e.target.value)}
+            error={Boolean(nameError)}
+            helperText={nameError}
+            required
+          />
+          <TextField
+            id="price"
+            label="Price"
+            type="number"
+            value={price}
+            placeholder="5.50"
+            onChange={(e) => setPrice(e.target.value)}
+            error={Boolean(priceError)}
+            helperText={priceError}
+            required
+            slotProps={{
+              input: {
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                inputProps: {
+                  step: 0.01,
+                  min: 0,
+                },
+              }
+            }}
+          />
+          <FormControl
+            error={Boolean(categoryError)}
+            required
+            style={{ minWidth: 200 }}
+          >
+            <InputLabel id="category-label">Category</InputLabel>
+            <Select
+              labelId="category-label"
               id="category"
               value={category}
+              label="Category"
               onChange={(e) => setCategory(e.target.value)}
-              required
             >
-              <option value="" disabled>Select category</option>
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {capitalise(category)}
-                </option>
+              <MenuItem value="" disabled>
+                Select category
+              </MenuItem>
+              {categories.map((c) => (
+                <MenuItem key={c} value={c}>
+                  {capitalise(c)}
+                </MenuItem>
               ))}
-            </select>
-          </div>
-          <div>
-            <button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : "Save Item"}
-            </button>
-          </div>
-          {errorMsg && <div className="error">{errorMsg}</div>}
-          {!errorMsg && successMsg && <div className="success">{successMsg}</div>}
-        </form>
-      )}
-    </>
-  );
+            </Select>
+            {categoryError && <FormHelperText>{categoryError}</FormHelperText>}
+          </FormControl>
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={isSubmitting}>
+            {isSubmitting ? 'Submitting...' : "Save Item"}
+          </Button>
+        </div>
+        {successMsg && (
+          <Typography variant="body1" color="success">
+            {successMsg}
+          </Typography>
+        )}
+      </form>
+    )}
+  </>);
 };
 
 export default ItemForm;
