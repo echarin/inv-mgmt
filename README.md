@@ -1,18 +1,13 @@
 # inv-mgmt
-Inventory management app using a FastAPI (Python) backend and React (TypeScript) frontend. 
+Inventory management app using a FastAPI (Python) backend and React (TypeScript) frontend. The backend connects to a MySQL container.
 
-## To-do
+## Installation
 
-### Backend
+Clone repository first, then run `docker compose up`.
 
-- Fix CORS origins, maybe [*]
+    git clone git@github.com:echarin/inv-mgmt.git
+    cd inv-mgmt
+    docker compose up --build
 
-### Frontend
+Access the frontend at <http://localhost:80> and the backend's Swagger API at <http://localhost:8000/docs>.
 
-- Go through React tutorial
-
-## Current issues
-
-## React Notes
-
-### 
