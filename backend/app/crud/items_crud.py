@@ -1,8 +1,10 @@
 from decimal import Decimal
+from typing import Tuple
 
 from sqlmodel import select
 
 from ..dependencies import SessionDep
+from ..enums.item_status import ItemStatus
 from ..models.item_create import ItemCreate
 from ..models.item_public import ItemPublic
 from ..params.filter_params import FilterParams
@@ -11,11 +13,16 @@ from ..utils import current_local_time, decimal_price_to_string
 
 
 class ItemsCrud:
+    def save_item(self, session: SessionDep, item: Item) -> None:
+        session.add(item)
+        session.commit()
+        session.refresh(item)
+
     def create_item_query(self, filter_params: FilterParams):
         query = select(Item)
         if filter_params.dt_from:
             query = query.where(Item.last_updated_dt >= filter_params.dt_from)
-        
+
         if filter_params.dt_to:
             query = query.where(Item.last_updated_dt <= filter_params.dt_to)
 
@@ -35,38 +42,33 @@ class ItemsCrud:
             items_public.append(item_public)
             total_price += item_public.price
 
-        return { 
-            "items": list(items_public),
-            "total_price": float(total_price)
-        }
-    
+        return {"items": list(items_public), "total_price": float(total_price)}
+
     def get_item_by_name(self, session: SessionDep, name: str) -> Item | None:
         return session.exec(select(Item).where(Item.name == name)).first()
 
-    def create_or_update_item(self, session: SessionDep, item: ItemCreate) -> Item:
-        item_db = Item(
-            **item.model_dump(),
-            last_updated_dt=current_local_time()
-        )
-        item_db.price = decimal_price_to_string(item.price)
-
-        existing_item = self.get_item_by_name(session, item_db.name)
+    def create_or_update_item(
+        self, session: SessionDep, item: ItemCreate
+    ) -> Tuple[Item, ItemStatus]:
+        item_data = item.model_dump()
+        existing_item = self.get_item_by_name(session, item.name)
+        current_time = current_local_time()
 
         if existing_item:
             print("Item already exists, proceeding to update")
-            existing_item.sqlmodel_update(item.model_dump(exclude_unset=True))
+            existing_item.sqlmodel_update(item_data)
             existing_item.price = decimal_price_to_string(item.price)
             existing_item.last_updated_dt = current_local_time()
-            item_db = existing_item
+            self.save_item(session, existing_item)
+            print(f"Item updated: {existing_item}")
+            return existing_item, ItemStatus.UPDATED
         else:
             print("Item does not exist, proceeding to create")
-        
-        session.add(item_db)
-        session.commit()
-        session.refresh(item_db)
+            new_item = Item(**item_data, last_updated_dt=current_time)
+            new_item.price = decimal_price_to_string(item.price)
+            self.save_item(session, new_item)
+            print(f"Item created: {new_item}")
+            return new_item, ItemStatus.CREATED
 
-        print(f"Item saved: {item_db.model_dump}")
 
-        return item_db
-    
 items_crud = ItemsCrud()

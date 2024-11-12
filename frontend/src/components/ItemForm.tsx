@@ -2,7 +2,7 @@ import { Button, FormControl, FormHelperText, InputAdornment, InputLabel, MenuIt
 import { useState } from "react";
 import { routes } from "../config";
 import apiClient from "../services/axios";
-import { ItemCreate, SearchParams } from "../types";
+import { ItemCreate, ItemsCreateResponse, ItemsStatus, SearchParams } from "../types";
 import { capitalise, PRICE_REGEX } from "../utils";
 
 interface ItemFormProps {
@@ -93,7 +93,12 @@ const ItemForm: React.FC<ItemFormProps> = ({
 
       resetForm();
 
-      setSuccessMsg(`Item created successfully with id ${response.data.id}.`);
+      const data = response.data as ItemsCreateResponse;
+      if (data.status === ItemsStatus.CREATED) {
+        setSuccessMsg(`Item created successfully with id ${data.id}.`);
+      } else {
+        setSuccessMsg(`Item with id ${data.id} updated successfully.`);
+      }
 
       onItemCreated(searchParams);
     } catch (error) {
@@ -134,6 +139,7 @@ const ItemForm: React.FC<ItemFormProps> = ({
             required
             slotProps={{
               input: {
+                // Place a "$" in front without being part of the value
                 startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 inputProps: {
                   step: 0.01,

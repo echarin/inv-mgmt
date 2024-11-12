@@ -134,6 +134,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             {categoryError && <FormHelperText>{categoryError}</FormHelperText>}
           </FormControl>
           <Button
+            variant="contained"
             type="submit"
             disabled={isFetchingCategories || isFetchingItems}
           >

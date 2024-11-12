@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from ..models.item_base import ItemBase
 
-
+# test
 class ItemPublic(ItemBase):
     id: int
 
