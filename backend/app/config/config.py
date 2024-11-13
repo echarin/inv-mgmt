@@ -18,11 +18,11 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    MYSQL_DATABASE: str
-    MYSQL_USER: str
-    MYSQL_PASSWORD: str
-    MYSQL_HOST: str
-    MYSQL_PORT: int
+    MYSQL_DATABASE: str = ""
+    MYSQL_USER: str = ""
+    MYSQL_PASSWORD: str = ""
+    MYSQL_HOST: str = ""
+    MYSQL_PORT: int = ""
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> MySQLDsn:
