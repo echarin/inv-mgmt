@@ -1,33 +1,32 @@
 name: inv-mgmt
 
 services:
+  # reference: https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
   db:
     image: mysql:lts
     restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    env_file: 
+      - .env
     ports:
       - "3306:3306"
     volumes:
       - .mysql_data:/var/lib/mysql
-    env_file: 
-      - .env
+    # reference: https://stackoverflow.com/questions/42567475/docker-compose-check-if-mysql-connection-is-ready
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "$$MYSQL_USER", "--password=$$MYSQL_PASSWORD"]
+      start_period: 5s
+      timeout: 20s
+      retries: 10
   
   backend:
     build: ./backend
+    env_file:
+      - .env
     ports:
       - "8000:8000"
-    environment:
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_HOST=${MYSQL_HOST}
-      - MYSQL_PORT=${MYSQL_PORT}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
     build: ./frontend
