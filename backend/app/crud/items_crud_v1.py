@@ -1,7 +1,8 @@
 from decimal import Decimal
 from typing import Tuple
 
-from sqlmodel import col, select
+from sqlalchemy import String
+from sqlmodel import cast, col, select
 from sqlmodel.sql.expression import SelectOfScalar
 
 from ..dependencies import SessionDep
@@ -22,10 +23,8 @@ class ItemsCrudV1:
 
     def create_item_query(self, filter_params: FilterParams):
         # default query is sorted by category in ascending order then by name in ascending order
-        query: SelectOfScalar = (
-            select(Item)
-            .order_by(col(Item.category).asc())
-            .order_by(col(Item.name).asc())
+        query: SelectOfScalar = select(Item).order_by(
+            cast(Item.category, String).asc(), col(Item.name).asc()
         )
 
         if filter_params.dt_from:

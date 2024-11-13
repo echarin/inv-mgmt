@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from sqlalchemy import DECIMAL
+from sqlalchemy import DECIMAL, String
 from sqlmodel import cast, col, select
 from sqlmodel.sql.expression import SelectOfScalar
 
@@ -33,7 +33,7 @@ class ItemsCrudV2:
         return query
 
     def create_default_sorted_query(self, query: SelectOfScalar):
-        return query.order_by(col(Item.category).asc()).order_by(col(Item.name).asc())
+        return query.order_by(cast(Item.category, String).asc(), col(Item.name).asc())
 
     def create_filters_query(
         self, query: SelectOfScalar, filter_params: FilterParamsV2
@@ -54,7 +54,7 @@ class ItemsCrudV2:
         if filter_params.price_range:
             min_price, max_price = filter_params.price_range
             query = query.where(
-                cast(col(Item.price), DECIMAL(10, 2)).between(min_price, max_price)
+                cast(Item.price, DECIMAL(10, 2)).between(min_price, max_price)
             )
 
         return query
