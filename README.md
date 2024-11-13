@@ -139,4 +139,4 @@ Validation:
 
 #### Backend Bonus Task
 
-Currently, there is a `POST /items/v2/` endpoint that accepts numerous parameters concerning filtering, pagination and sorting. It can accept an empty request body `{}` or a request body in which `filters`, `pagination` and `sort` are all empty bodies. It also has validation for parameters such as price range, page and limit. However, the corresponding frontend component has not been coded at the time of submission.
+Currently, there is a `POST /items/v2/` endpoint that accepts numerous parameters concerning filtering, pagination and sorting. It can accept an empty request body `{}` or a request body in which `filters`, `pagination` and `sort` are all empty bodies. It also has validation for parameters such as price range, page and limit. However, the corresponding frontend component has not been coded at the time of submission, and unit tests have not been written for this part of the backend.
