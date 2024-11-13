@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .db.session import create_db_and_tables
-from .router import items_router
+from .router import items_router_v1
 
 
 @retry(wait=wait_fixed(2), stop=stop_after_delay(30))
@@ -27,7 +27,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.include_router(items_router.router)
+app.include_router(items_router_v1.router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
