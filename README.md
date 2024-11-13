@@ -50,7 +50,7 @@ Success case:
 - Check that all items are reflected in the table.
 - Enter start date as a date after today, and click "Search". Check that no items are returned. Clear the field.
 - Enter end date as a date before today, and click "Search". Check that no items are returned. Clear the field.
-- Enter different categories and check that the appropriate items are returned. 
+- Enter different categories and check that the appropriate items are returned.
 
 #### Backend validation
 
