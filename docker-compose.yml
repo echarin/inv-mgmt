@@ -5,22 +5,27 @@ services:
   db:
     image: mysql:lts
     restart: always
+    env_file: 
+      - .env
     ports:
       - "3306:3306"
     volumes:
       - .mysql_data:/var/lib/mysql
-      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql # initialisation
-    env_file: 
-      - .env
+    # reference: https://stackoverflow.com/questions/42567475/docker-compose-check-if-mysql-connection-is-ready
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "$$MYSQL_USER", "--password=$$MYSQL_PASSWORD"]
+      timeout: 20s
+      retries: 10
   
   backend:
     build: ./backend
-    ports:
-      - "8000:8000"
     env_file:
       - .env
+    ports:
+      - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
     build: ./frontend
