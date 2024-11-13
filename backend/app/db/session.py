@@ -2,6 +2,7 @@ from sqlmodel import Session, SQLModel, create_engine
 
 from ..config.config import settings
 
+print(str(settings.SQLALCHEMY_DATABASE_URI)) # debugging
 engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
 
 

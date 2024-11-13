@@ -1,18 +1,15 @@
 name: inv-mgmt
 
 services:
+  # reference: https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
   db:
     image: mysql:lts
     restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
       - .mysql_data:/var/lib/mysql
+      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql # initialisation
     env_file: 
       - .env
   
@@ -20,12 +17,8 @@ services:
     build: ./backend
     ports:
       - "8000:8000"
-    environment:
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_HOST=${MYSQL_HOST}
-      - MYSQL_PORT=${MYSQL_PORT}
+    env_file:
+      - .env
     depends_on:
       - db
 
