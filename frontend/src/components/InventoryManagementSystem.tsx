@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { routes } from "../config";
 import apiClient from "../services/axios";
@@ -5,7 +6,6 @@ import { ItemsQuery, SearchParams } from "../types";
 import { jsonToCamelCase } from "../utils";
 import FilterableItemTable from "./FilterableItemTable";
 import ItemForm from "./ItemForm";
-import { Typography } from "@mui/material";
 
 const InventoryManagementSystem: React.FC = () => {
   const [itemsQuery, setItemsQuery] = useState<ItemsQuery | null>(null);

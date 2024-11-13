@@ -85,7 +85,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       flexDirection="column"
       alignItems="center"
       padding={3}
-      gap={2} 
+      gap={2}
       width="100%"
       maxWidth={800}
     >
