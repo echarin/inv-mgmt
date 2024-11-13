@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Category(Enum):
+class Category(str, Enum):
     stationery = "stationery"
     electronics = "electronics"
     books = "books"

@@ -1,3 +1,6 @@
+# This file specifies settings and containers for running the app on a production build locally
+# Hence ".env.localprod" is used as the env file
+
 name: inv-mgmt
 
 services:
@@ -6,7 +9,7 @@ services:
     image: mysql:lts
     restart: always
     env_file: 
-      - .env
+      - .env.localprod
     ports:
       - "3306:3306"
     volumes:
@@ -21,7 +24,7 @@ services:
   backend:
     build: ./backend
     env_file:
-      - .env
+      - .env.localprod
     ports:
       - "8000:8000"
     depends_on:

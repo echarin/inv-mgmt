@@ -2,7 +2,7 @@ from sqlmodel import Session, SQLModel, create_engine
 
 from ..config.config import settings
 
-engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
+engine = create_engine(str(settings.DATABASE_URL))
 
 
 def create_db_and_tables():

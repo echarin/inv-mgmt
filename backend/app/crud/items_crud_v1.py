@@ -1,25 +1,32 @@
 from decimal import Decimal
 from typing import Tuple
 
-from sqlmodel import select
+from sqlalchemy import String
+from sqlmodel import cast, col, select
+from sqlmodel.sql.expression import SelectOfScalar
 
 from ..dependencies import SessionDep
 from ..enums.item_status import ItemStatus
 from ..models.item_create import ItemCreate
 from ..models.item_public import ItemPublic
+from ..models.items_query import ItemsQuery
 from ..params.filter_params import FilterParams
 from ..schemas.item import Item
 from ..utils import current_local_time, decimal_price_to_string
 
 
-class ItemsCrud:
+class ItemsCrudV1:
     def save_item(self, session: SessionDep, item: Item) -> None:
         session.add(item)
         session.commit()
         session.refresh(item)
 
     def create_item_query(self, filter_params: FilterParams):
-        query = select(Item)
+        # default query is sorted by category in ascending order then by name in ascending order
+        query: SelectOfScalar = select(Item).order_by(
+            cast(Item.category, String).asc(), col(Item.name).asc()
+        )
+
         if filter_params.dt_from:
             query = query.where(Item.last_updated_dt >= filter_params.dt_from)
 
@@ -31,7 +38,9 @@ class ItemsCrud:
 
         return query
 
-    def read_items(self, session: SessionDep, filter_params: FilterParams) -> dict:
+    def read_items(
+        self, session: SessionDep, filter_params: FilterParams
+    ) -> ItemsQuery:
         query = self.create_item_query(filter_params)
         items_db = session.exec(query).all()
 
@@ -42,7 +51,7 @@ class ItemsCrud:
             items_public.append(item_public)
             total_price += item_public.price
 
-        return {"items": list(items_public), "total_price": float(total_price)}
+        return ItemsQuery(items=items_public, total_price=float(total_price))
 
     def get_item_by_name(self, session: SessionDep, name: str) -> Item | None:
         return session.exec(select(Item).where(Item.name == name)).first()
@@ -71,4 +80,4 @@ class ItemsCrud:
             return new_item, ItemStatus.CREATED
 
 
-items_crud = ItemsCrud()
+items_crud_v1 = ItemsCrudV1()
