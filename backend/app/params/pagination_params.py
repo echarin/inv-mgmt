@@ -1,5 +1,11 @@
+from pydantic import Field
+
 from .params import Params
+
+DEFAULT_PAGE: int = 1
+DEFAULT_LIMIT: int = 10
 
 
 class PaginationParams(Params):
-    pass
+    page: int = Field(DEFAULT_PAGE, gt=0)
+    limit: int = Field(DEFAULT_LIMIT, gt=0, le=100)

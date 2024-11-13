@@ -2,7 +2,7 @@ from datetime import timedelta
 from decimal import Decimal
 
 import pytest
-from app.crud.items_crud import ItemsCrud
+from backend.app.crud.items_crud_v1 import ItemsCrudV1
 from app.enums.category import Category
 from app.enums.item_status import ItemStatus
 from app.models.item_create import ItemCreate
@@ -24,7 +24,7 @@ def session():
 
 @pytest.fixture(scope="module")
 def items_crud():
-    return ItemsCrud()
+    return ItemsCrudV1()
 
 
 @pytest.fixture
