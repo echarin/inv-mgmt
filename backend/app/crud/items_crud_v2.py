@@ -96,16 +96,14 @@ class ItemsCrudV2:
             total_price += item_public.price
 
         count = len(items_public)
-        page = (
-            overall_params.pagination.page
-            if overall_params.pagination
-            else DEFAULT_PAGE
-        )
-        limit = (
-            overall_params.pagination.limit
-            if overall_params.pagination
-            else DEFAULT_LIMIT
-        )
+        page = DEFAULT_PAGE
+        limit = DEFAULT_LIMIT
+
+        if (overall_params.pagination) and (overall_params.pagination.page):
+            page = overall_params.pagination.page
+
+        if (overall_params.pagination) and (overall_params.pagination.limit):
+            limit = overall_params.pagination.limit
 
         return ItemsQueryPaginated(
             items=items_public,

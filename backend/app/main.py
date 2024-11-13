@@ -1,9 +1,9 @@
 from contextlib import asynccontextmanager
-from tenacity import retry, wait_fixed, stop_after_delay
 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from tenacity import retry, stop_after_delay, wait_fixed
 
 from .db.session import create_db_and_tables
 from .router import items_router_v1, items_router_v2
@@ -13,10 +13,12 @@ from .router import items_router_v1, items_router_v2
 def initialize_database():
     create_db_and_tables()
 
+
 @asynccontextmanager  # see https://fastapi.tiangolo.com/advanced/events/#async-context-manager
 async def lifespan(app: FastAPI):
     initialize_database()
     yield
+
 
 # test
 app = FastAPI(
