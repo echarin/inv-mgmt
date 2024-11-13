@@ -16,7 +16,6 @@ from ..schemas.item import Item
 
 class ItemsCrudV2:
     def create_item_query(self, overall_params: OverallParams):
-        # default query is sorted by category in ascending order then by name in ascending order
         query: SelectOfScalar = select(Item)
 
         if overall_params.filters:
@@ -28,11 +27,13 @@ class ItemsCrudV2:
         if overall_params.sort:
             query = self.create_sorting_query(query, overall_params.sort)
         else:
-            query = query.order_by(col(Item.category).asc()).order_by(
-                col(Item.name).asc()
-            )
+            # default query is sorted by category in ascending order then by name in ascending order
+            query = self.create_default_sorted_query(query)
 
         return query
+
+    def create_default_sorted_query(self, query: SelectOfScalar):
+        return query.order_by(col(Item.category).asc()).order_by(col(Item.name).asc())
 
     def create_filters_query(
         self, query: SelectOfScalar, filter_params: FilterParamsV2
@@ -69,12 +70,16 @@ class ItemsCrudV2:
     def create_sorting_query(
         self, query: SelectOfScalar, sorting_params: SortingParams
     ) -> SelectOfScalar:
+        if not sorting_params.field and not sorting_params.order:
+            return self.create_default_sorted_query(query)
+
         if sorting_params.field and hasattr(Item, sorting_params.field):
             column = col(getattr(Item, sorting_params.field))
             if sorting_params.order == "asc":
                 query = query.order_by(column.asc())
             elif sorting_params.order == "desc":
                 query = query.order_by(column.desc())
+
         return query
 
     def read_items_v2(
