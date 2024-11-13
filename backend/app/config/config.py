@@ -1,3 +1,4 @@
+import os
 from pydantic import MySQLDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -5,8 +6,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 # come back to https://fastapi.tiangolo.com/advanced/settings/#reading-a-env-file
 # reference: https://github.com/fastapi/full-stack-fastapi-template/blob/master/backend/app/core/config.py
 class Settings(BaseSettings):
+    # ".env" compared to "./backend/app/config/config.py"
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    env_file_path = os.path.join(BASE_DIR, '.env')
+
     model_config = SettingsConfigDict(
-        env_file="../.env",
+        env_file=env_file_path,
         env_ignore_empty=True,
         extra="ignore",
         env_file_encoding="utf-8",
