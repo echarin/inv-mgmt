@@ -27,7 +27,7 @@ class ItemsCrudV2:
         if overall_params.sort:
             query = self.create_sorting_query(query, overall_params.sort)
         else:
-            # default query is sorted by category in ascending order then by name in ascending order
+            # Default query is sorted by category in ascending order then by name in ascending order
             query = self.create_default_sorted_query(query)
 
         return query
@@ -98,12 +98,13 @@ class ItemsCrudV2:
         count = len(items_public)
         page = (
             overall_params.pagination.page
-            if overall_params.pagination
+            # Check existence of these fields
+            if (overall_params.pagination and overall_params.pagination.page)
             else DEFAULT_PAGE
         )
         limit = (
             overall_params.pagination.limit
-            if overall_params.pagination
+            if (overall_params.pagination and overall_params.pagination.limit)
             else DEFAULT_LIMIT
         )
 

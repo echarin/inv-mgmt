@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app.utils import current_local_time, decimal_price_to_string
+from backend.app.utils import current_local_time, decimal_price_to_string
 
 
 def test_decimal_price_to_string():
