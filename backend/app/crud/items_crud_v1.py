@@ -23,6 +23,7 @@ class ItemsCrudV1:
 
     def create_item_query(self, filter_params: FilterParams):
         # default query is sorted by category in ascending order then by name in ascending order
+        # Future: refactor this since there is a v2 that has a similar function
         query: SelectOfScalar = select(Item).order_by(
             cast(Item.category, String).asc(), col(Item.name).asc()
         )
@@ -64,6 +65,7 @@ class ItemsCrudV1:
         current_time = current_local_time()
 
         if existing_item:
+            # Future: log instead of printing
             print("Item already exists, proceeding to update")
             existing_item.sqlmodel_update(item_data)
             existing_item.price = decimal_price_to_string(item.price)
