@@ -14,7 +14,6 @@ services:
       - "3306:3306"
     volumes:
       - .mysql_data:/var/lib/mysql
-    # reference: https://stackoverflow.com/questions/42567475/docker-compose-check-if-mysql-connection-is-ready
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "$$MYSQL_USER", "--password=$$MYSQL_PASSWORD"]
       start_period: 5s

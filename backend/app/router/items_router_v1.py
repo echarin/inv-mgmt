@@ -32,9 +32,6 @@ async def read_categories():
 async def create_item(session: SessionDep, item: ItemCreate):
     item_created, status = items_crud_v1.create_or_update_item(session, item)
     return JSONResponse(
-        status_code=STATUS_CODE_MAPPING[status], 
-        content={
-            "id": item_created.id,
-            "status": status.value
-        }
+        status_code=STATUS_CODE_MAPPING[status],
+        content={"id": item_created.id, "status": status.value},
     )

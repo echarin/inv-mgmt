@@ -4,8 +4,6 @@ from pydantic import AnyUrl, MySQLDsn
 from pydantic_settings import BaseSettings
 
 
-# come back to https://fastapi.tiangolo.com/advanced/settings/#reading-a-env-file
-# reference: https://github.com/fastapi/full-stack-fastapi-template/blob/master/backend/app/core/config.py
 class Settings(BaseSettings):
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "dev")
     DEBUG: bool = ENVIRONMENT == "dev"
@@ -41,5 +39,3 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
-
-# also see https://github.com/JakubPluta/gymhero/blob/main/gymhero/config.py for inspiration on using different settings
